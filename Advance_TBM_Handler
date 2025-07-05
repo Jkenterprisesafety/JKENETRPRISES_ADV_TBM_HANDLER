@@ -14,8 +14,8 @@
             color: #d32f2f;
         }
         #dashboard-header {
-            background-color: #952424;
-            color: #fff;
+            background-color: #fff; /* Changed to white */
+            color: #800000; /* Changed text to maroon */
             padding: 15px 30px;
             display: flex;
             align-items: center;
@@ -42,14 +42,14 @@
         }
         .header-title {
             font-family: 'Arial Black', Arial, sans-serif;
-            color: #fff;
+            color: #800000; /* Changed to maroon */
             font-size: 2em;
             font-weight: normal;
             text-align: center;
             letter-spacing: 1px;
         }
         .header-tagline {
-            color: #800000;
+            color: #7ba75e6b; /* Changed to maroon */
             font-size: 1em;
             font-family: Arial, sans-serif;
             margin-top: 2px;
@@ -77,13 +77,25 @@
         </div>
     </header>
     <div class="main-container">
-        <h2 style="text-align: center; color: #d32f2f; font-family: 'Arial Black', Arial, sans-serif; font-size: 2em; margin: 0 0 10px 0; font-weight: normal;">
-            PPE & Attendance Form
-        </h2>
-        <div style="text-align: center; color: #222; font-size: 1.2em; margin-bottom: 24px;">
-            <b>Vendor Code: J0F0 | TATA Steel Jamshedpur</b>
-        </div>
-        <form id="attendance-form">
+        <!-- Login Form -->
+        <form id="login-form" style="max-width: 350px; margin: 0 auto 30px auto; background: #f9f9f9; border-radius: 10px; box-shadow: 0 2px 8px #eee; padding: 24px;">
+            <h3 style="text-align:center; color:#800000; margin-bottom:18px;">Login</h3>
+            <label style="color:#800000; font-weight:bold;">Username:</label>
+            <input type="text" id="username" style="width:100%; padding:8px; margin-bottom:14px; border-radius:5px; border:1px solid #ccc;" required>
+            <label style="color:#800000; font-weight:bold;">Password:</label>
+            <input type="password" id="password" style="width:100%; padding:8px; margin-bottom:18px; border-radius:5px; border:1px solid #ccc;" required>
+            <button type="submit" style="width:100%; background:#800000; color:#fff; font-weight:bold; padding:10px 0; border:none; border-radius:5px; cursor:pointer;">Login</button>
+            <div id="login-error" style="color:#d32f2f; margin-top:10px; text-align:center; display:none;">Invalid credentials. Please try again.</div>
+        </form>
+
+        <!-- Attendance Form (hidden until login) -->
+        <form id="attendance-form" style="display:none;">
+            <h2 style="text-align: center; color: #d32f2f; font-family: 'Arial Black', Arial, sans-serif; font-size: 2em; margin: 0 0 10px 0; font-weight: normal;">
+                PPE & Attendance Form
+            </h2>
+            <div style="text-align: center; color: #222; font-size: 1.2em; margin-bottom: 24px;">
+                <b>Vendor Code: J0F0 | TATA Steel Jamshedpur</b>
+            </div>
             <label style="font-weight: bold; color: #d32f2f;">Select Date:</label>
             <input type="date" name="date" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
             
@@ -92,28 +104,255 @@
                 <option value="">-- Select Site --</option>
                 <option value="NBM">NBM</option>
                 <option value="WRM">WRM</option>
-                <option value="R&D">R&D</option>
+                <option value="MM">MM</option>
             </select>
             
             <div style="font-weight: bold; color: #d32f2f; margin-bottom: 10px;">Mark Attendance</div>
-            <label style="color: #222;">Employee ID:</label>
-            <input type="text" name="employee_id" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
             
-            <label style="color: #222;">Name:</label>
-            <input type="text" name="name" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
             
-            <label style="color: #222;">Designation:</label>
-            <input type="text" name="designation" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
+            <!-- Attendance Table -->
+            <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
+                <thead>
+                    <tr style="background:#f3f3f3;">
+                        <th style="padding:8px; border:1px solid #ccc;">Name</th>
+                        <th style="padding:8px; border:1px solid #ccc;">Designation</th>
+                        <th style="padding:8px; border:1px solid #ccc;">Safety Pass No</th>
+                        <th style="padding:8px; border:1px solid #ccc;">Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Harish Singh sardar</td>
+                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW1220250760  </td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[0]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Jay Narayan Singh</td>
+                        <td style="padding:8px; border:1px solid #ccc;">SUPERVISOR</td>
+                        <td style="padding:8px; border:1px solid #ccc;">VT0519161104</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[1]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Krishna Kerai</td>
+                        <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0921306252</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[2]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Lakhan Purty</td>
+                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0324141471</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[3]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Mahadeb Mahato</td>
+                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW1123922315</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[4]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Manoj Hembrom</td>
+                        <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">VW0325492567</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[5]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Pintu Kumar</td>
+                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0225457383</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[6]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Shiva Kumar Sahare</td>
+                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0717114422</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[7]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Vicky Kumar Mishra</td>
+                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0711153420</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[8]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">J.K Singh</td>
+                        <td style="padding:8px; border:1px solid #ccc;">Proprietor</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RS0208006850</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[9]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Raj kishore</td>
+                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0310125508</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[10]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Pradhan champia</td>
+                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0415143212</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[11]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:8px; border:1px solid #ccc;">Manoranjan das</td>
+                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                        <td style="padding:8px; border:1px solid #ccc;">RW0622542655</td>
+                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
+                                <input type="checkbox" name="attendance[12]" checked
+                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
+                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
+                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
+                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
+                                >
+                                <span style="font-weight:bold; color:green;">P</span>
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
             
-            <label style="color: #222;">Department:</label>
-            <input type="text" name="department" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
-            
-            <label style="color: #222;">Shift Timing:</label>
-            <input type="text" name="shift_timing" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
-            
-            <button type="submit" style="width: 100%; background: #93163b; color: #fff; font-size: 1.2em; padding: 12px 0; border: none; border-radius: 6px; font-family: 'Arial Black', Arial, sans-serif; cursor: pointer;">
-                Submit
-            </button>
+            <button type="submit"
+    style="
+        width: 100%;
+        background: linear-gradient(90deg, #800000 0%, #d32f2f 100%);
+        color: #fff;
+        font-size: 1.2em;
+        padding: 14px 0;
+        border: none;
+        border-radius: 30px;
+        font-family: 'Arial Black', Arial, sans-serif;
+        cursor: pointer;
+        box-shadow: 0 4px 16px rgba(211,47,47,0.12);
+        letter-spacing: 1px;
+        transition: background 0.3s, transform 0.2s;
+        margin-top: 10px;
+    "
+    onmouseover="this.style.background='linear-gradient(90deg, #d32f2f 0%, #800000 100%)'; this.style.transform='scale(1.03)';"
+    onmouseout="this.style.background='linear-gradient(90deg, #800000 0%, #d32f2f 100%)'; this.style.transform='scale(1)';"
+>
+    <span style="font-size:1.1em; font-weight:bold; letter-spacing:2px;">&#10003; Submit Attendance</span>
+</button>
         </form>
         <div style="text-align: center; color: #888; font-size: 0.95em; margin-top: 30px;">
             © 2025 M/S J.K ENTERPRISES | Vendor Code: J0F0 | TATA Steel Jamshedpur
@@ -122,7 +361,28 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Login system
+            const loginForm = document.getElementById('login-form');
             const attendanceForm = document.getElementById('attendance-form');
+            const loginError = document.getElementById('login-error');
+
+            // Demo credentials (replace with real authentication as needed)
+            const DEMO_USER = "admin";
+            const DEMO_PASS = "1234";
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+                if (username === DEMO_USER && password === DEMO_PASS) {
+                    loginForm.style.display = "none";
+                    attendanceForm.style.display = "block";
+                    loginError.style.display = "none";
+                } else {
+                    loginError.style.display = "block";
+                }
+            });
+
             attendanceForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
