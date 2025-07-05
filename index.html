@@ -30,8 +30,8 @@
             width: 100%;
         }
         .header-logo {
-            height: 48px;
-            width: 64px;
+            height: 64px;   /* Increased from 48px */
+            width: 90px;    /* Increased from 64px */
             object-fit: contain;
             margin-right: 18px;
         }
@@ -43,19 +43,21 @@
         }
         .header-title {
             font-family: 'Arial Black', Arial, sans-serif;
-            color: #800000; /* Changed to maroon */
-            font-size: 2em;
+            color: #800000;
+            font-size: 2.4em; /* Slightly larger */
             font-weight: normal;
             text-align: center;
             letter-spacing: 1px;
+            text-shadow: 2px 2px 8px rgba(128,0,0,0.25), 0 2px 12px rgba(0,0,0,0.18);
         }
         .header-tagline {
-            color: #800000; /* Changed to maroon */
-            font-size: 1em;
+            color: #800000;
+            font-size: 1.15em;
             font-family: Arial, sans-serif;
             margin-top: 2px;
             text-align: center;
             letter-spacing: 1px;
+            text-shadow: 1px 1px 6px rgba(128,0,0,0.18), 0 1px 8px rgba(0,0,0,0.13);
         }
         .main-container {
             max-width: 600px;
@@ -64,6 +66,50 @@
             border-radius: 16px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.10);
             padding: 32px;
+        }
+        .flip-toggle {
+            width: 90px;      /* Increased width */
+            height: 40px;     /* Increased height */
+            perspective: 300px;
+            display: inline-block;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .flip-toggle-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(.4,2,.6,1);
+            transform-style: preserve-3d;
+        }
+        .flip-toggle.flipped .flip-toggle-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-toggle-front, .flip-toggle-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.15em; /* Slightly larger font */
+            box-shadow: 0 2px 8px #eee;
+            border: 2px solid #ccc;
+            user-select: none;
+        }
+        .flip-toggle-front {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-color: #81c784;
+        }
+        .flip-toggle-back {
+            background: #ffebee;
+            color: #c62828;
+            border-color: #ef9a9a;
+            transform: rotateY(180deg);
         }
     </style>
 </head>
@@ -80,7 +126,9 @@
     <div class="main-container">
         <!-- Login Form -->
         <form id="login-form" style="max-width: 350px; margin: 0 auto 30px auto; background: #f9f9f9; border-radius: 10px; box-shadow: 0 2px 8px #eee; padding: 24px;">
-            <h3 style="text-align:center; color:#800000; margin-bottom:18px;">Login</h3>
+            <div style="text-align:center; margin-bottom:18px;">
+                <img src="JKlogo.png" alt="JKE logo" style="height:90px; width:auto; object-fit:contain;">
+            </div>
             <label style="color:#800000; font-weight:bold;">Username:</label>
             <input type="text" id="username" style="width:100%; padding:8px; margin-bottom:14px; border-radius:5px; border:1px solid #ccc;" required>
             <label style="color:#800000; font-weight:bold;">Password:</label>
@@ -101,259 +149,247 @@
             <input type="date" name="date" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
             
             <label style="font-weight: bold; color: #d32f2f;">Select Site:</label>
-            <select name="site" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
+            <select name="site" id="site-select" style="width: 100%; padding: 10px; margin-bottom: 18px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;" required>
                 <option value="">-- Select Site --</option>
                 <option value="NBM">NBM</option>
                 <option value="WRM">WRM</option>
                 <option value="MM">MM</option>
             </select>
-            
-            <div style="font-weight: bold; color: #d32f2f; margin-bottom: 10px;">Mark Attendance</div>
-            
-            
-            <!-- Attendance Table -->
-            <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
-                <thead>
-                    <tr style="background:#f3f3f3;">
-                        <th style="padding:8px; border:1px solid #ccc;">Name</th>
-                        <th style="padding:8px; border:1px solid #ccc;">Designation</th>
-                        <th style="padding:8px; border:1px solid #ccc;">Safety Pass No</th>
-                        <th style="padding:8px; border:1px solid #ccc;">Attendance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Harish Singh sardar</td>
-                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW1220250760  </td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[0]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Jay Narayan Singh</td>
-                        <td style="padding:8px; border:1px solid #ccc;">SUPERVISOR</td>
-                        <td style="padding:8px; border:1px solid #ccc;">VT0519161104</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[1]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Krishna Kerai</td>
-                        <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0921306252</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[2]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Lakhan Purty</td>
-                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0324141471</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[3]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Mahadeb Mahato</td>
-                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW1123922315</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[4]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Manoj Hembrom</td>
-                        <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">VW0325492567</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[5]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Pintu Kumar</td>
-                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0225457383</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[6]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Shiva Kumar Sahare</td>
-                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0717114422</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[7]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Vicky Kumar Mishra</td>
-                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0711153420</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[8]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">J.K Singh</td>
-                        <td style="padding:8px; border:1px solid #ccc;">Proprietor</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RS0208006850</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[9]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Raj kishore</td>
-                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0310125508</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[10]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Pradhan champia</td>
-                        <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0415143212</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[11]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding:8px; border:1px solid #ccc;">Manoranjan das</td>
-                        <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
-                        <td style="padding:8px; border:1px solid #ccc;">RW0622542655</td>
-                        <td style="padding:8px; border:1px solid #ccc; text-align:center;">
-                            <label style="display:inline-flex; align-items:center; cursor:pointer;">
-                                <input type="checkbox" name="attendance[12]" checked
-                                    style="width:36px; height:20px; appearance:none; background:#2196f3; border-radius:12px; position:relative; outline:none; transition:.2s; margin-right:8px; box-shadow:inset 0 0 4px #bbb;"
-                                    oninput="this.style.background = this.checked ? '#2196f3' : '#ccc'; this.nextElementSibling.innerText = this.checked ? 'P' : 'A'; this.nextElementSibling.style.color = this.checked ? 'green' : 'red';"
-                                    onfocus="this.style.boxShadow='0 0 0 2px #2196f3';"
-                                    onblur="this.style.boxShadow='inset 0 0 4px #bbb';"
-                                >
-                                <span style="font-weight:bold; color:green;">P</span>
-                            </label>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            
-            <button type="submit"
-    style="
-        width: 100%;
-        background: linear-gradient(90deg, #800000 0%, #d32f2f 100%);
-        color: #fff;
-        font-size: 1.2em;
-        padding: 14px 0;
-        border: none;
-        border-radius: 30px;
-        font-family: 'Arial Black', Arial, sans-serif;
-        cursor: pointer;
-        box-shadow: 0 4px 16px rgba(211,47,47,0.12);
-        letter-spacing: 1px;
-        transition: background 0.3s, transform 0.2s;
-        margin-top: 10px;
-    "
-    onmouseover="this.style.background='linear-gradient(90deg, #d32f2f 0%, #800000 100%)'; this.style.transform='scale(1.03)';"
-    onmouseout="this.style.background='linear-gradient(90deg, #800000 0%, #d32f2f 100%)'; this.style.transform='scale(1)';"
->
-    <span style="font-size:1.1em; font-weight:bold; letter-spacing:2px;">&#10003; Submit Attendance</span>
-</button>
+
+            <!-- Attendance Table Section (initially hidden) -->
+            <div id="attendance-table-section" style="display:none;">
+                <div style="font-weight: bold; color: #d32f2f; margin-bottom: 10px;">Mark Attendance</div>
+                
+                <!-- Attendance Table -->
+                <table style="width:100%; border-collapse:collapse; margin-bottom:24px;">
+                    <thead>
+                        <tr style="background:#f3f3f3;">
+                            <th style="padding:8px; border:1px solid #ccc;">Name</th>
+                            <th style="padding:8px; border:1px solid #ccc;">Designation</th>
+                            <th style="padding:8px; border:1px solid #ccc;">Safety Pass No</th>
+                            <th style="padding:8px; border:1px solid #ccc;">Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Harish Singh sardar</td>
+                            <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW1220250760  </td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[0] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[0]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Jay Narayan Singh</td>
+                            <td style="padding:8px; border:1px solid #ccc;">SUPERVISOR</td>
+                            <td style="padding:8px; border:1px solid #ccc;">VT0519161104</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[1] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[1]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Krishna Kerai</td>
+                            <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0921306252</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[2] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[2]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Lakhan Purty</td>
+                            <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0324141471</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[3] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[3]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Mahadeb Mahato</td>
+                            <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW1123922315</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[4] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[4]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Manoj Hembrom</td>
+                            <td style="padding:8px; border:1px solid #ccc;">FITTER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">VW0325492567</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[5] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[5]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Pintu Kumar</td>
+                            <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0225457383</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[6] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[6]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Shiva Kumar Sahare</td>
+                            <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0717114422</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[7] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[7]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Vicky Kumar Mishra</td>
+                            <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0711153420</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[8] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[8]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">J.K Singh</td>
+                            <td style="padding:8px; border:1px solid #ccc;">Proprietor</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RS0208006850</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[9] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[9]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Raj kishore</td>
+                            <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0310125508</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[10] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[10]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Pradhan champia</td>
+                            <td style="padding:8px; border:1px solid #ccc;">HELPER</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0415143212</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[11] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[11]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:8px; border:1px solid #ccc;">Manoranjan das</td>
+                            <td style="padding:8px; border:1px solid #ccc;">W/GC</td>
+                            <td style="padding:8px; border:1px solid #ccc;">RW0622542655</td>
+                            <td style="padding:8px; border:1px solid #ccc; text-align:center;">
+                                <!-- Example for attendance[12] -->
+                                <div class="flip-toggle" onclick="toggleFlip(this)">
+                                    <div class="flip-toggle-inner">
+                                        <div class="flip-toggle-front">Present</div>
+                                        <div class="flip-toggle-back">Absent</div>
+                                    </div>
+                                    <input type="hidden" name="attendance[12]" value="Present">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit"
+                    style="
+                        width: 100%;
+                        background: linear-gradient(90deg, #800000 0%, #d32f2f 100%);
+                        color: #fff;
+                        font-size: 1.2em;
+                        padding: 14px 0;
+                        border: none;
+                        border-radius: 30px;
+                        font-family: 'Arial Black', Arial, sans-serif;
+                        cursor: pointer;
+                        box-shadow: 0 4px 16px rgba(211,47,47,0.12);
+                        letter-spacing: 1px;
+                        transition: background 0.3s, transform 0.2s;
+                        margin-top: 10px;
+                    "
+                    onmouseover="this.style.background='linear-gradient(90deg, #d32f2f 0%, #800000 100%)'; this.style.transform='scale(1.03)';"
+                    onmouseout="this.style.background='linear-gradient(90deg, #800000 0%, #d32f2f 100%)'; this.style.transform='scale(1)';"
+                >
+                    <span style="font-size:1.1em; font-weight:bold; letter-spacing:2px;">&#10003; Submit Attendance</span>
+                </button>
+            </div>
         </form>
         <div style="text-align: center; color: #888; font-size: 0.95em; margin-top: 30px;">
             © 2025 M/S J.K ENTERPRISES | Vendor Code: J0F0 | TATA Steel Jamshedpur
@@ -366,6 +402,8 @@
             const loginForm = document.getElementById('login-form');
             const attendanceForm = document.getElementById('attendance-form');
             const loginError = document.getElementById('login-error');
+            const siteSelect = document.getElementById('site-select');
+            const attendanceTableSection = document.getElementById('attendance-table-section');
 
             // Demo credentials (replace with real authentication as needed)
             const DEMO_USER = "admin";
@@ -381,6 +419,15 @@
                     loginError.style.display = "none";
                 } else {
                     loginError.style.display = "block";
+                }
+            });
+
+            // Show/hide attendance table section based on site selection
+            siteSelect.addEventListener('change', function() {
+                if (this.value) {
+                    attendanceTableSection.style.display = 'block';
+                } else {
+                    attendanceTableSection.style.display = 'none';
                 }
             });
 
@@ -417,6 +464,21 @@
                 }
             });
         });
+
+        function toggleFlip(element) {
+            const innerElement = element.querySelector('.flip-toggle-inner');
+            const inputElement = element.querySelector('input[type="hidden"]');
+
+            // Toggle the flipped class
+            element.classList.toggle('flipped');
+
+            // Update the hidden input value based on the toggle state
+            if (element.classList.contains('flipped')) {
+                inputElement.value = 'Absent';
+            } else {
+                inputElement.value = 'Present';
+            }
+        }
     </script>
 </body>
 </html>
